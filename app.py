@@ -1,15 +1,21 @@
 from flask import Flask, request
 from twilio import twiml
+from werkzeug.contrib.cache import RedisCache, SimpleCache
 
 
 app = Flask(__name__)
+
+# Configure the cache
+app.cache = SimpleCache()
 
 @app.route('/retry', methods=['GET', 'POST'])
 def retry_request():
     """ bar """
     resp = twiml.Response()
 
-    if 'ErrorCode' in request.values and request.values['ErrorCode'] == '11200' and False:
+    # errored_recently = app.cache.get()
+
+    if 'ErrorCode' in request.values and request.values['ErrorCode'] == '11200':
         # The original request timed out, but let's try it again
         resp.pause(length=10)
         resp.redirect(request.values['ErrorUrl'],
