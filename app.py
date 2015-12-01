@@ -3,6 +3,7 @@ from twilio import twiml
 from urllib.parse import urlparse
 
 import asyncio
+import os
 import redis
 
 
@@ -24,7 +25,7 @@ async def retry_request(request):
     error_hostname = urlparse(error_url).hostname
 
     resp = twiml.Response()
-    if data['ErrorCode'] == '11200': # and not request.app.cache.exists(error_hostname):
+    if data['ErrorCode'] == '11200' and not request.app.cache.exists(error_hostname):
         # Twilio couldn't reach the original URL. Let's wait 8 seconds and then
         # tell Twilio to try again
         await asyncio.sleep(8.0)
@@ -35,7 +36,7 @@ async def retry_request(request):
 
         # Also add the ErrorUrl's hostname to our cache for 15 minutes
         # so we know to give up on this request if Twilio comes back again
-        request.app.cache.setex(error_hostname, 60 * 15, True)
+        request.app.cache.setex(error_hostname, True, 60 * 15)
     else:
         # There's no hope for this request. Redirect to the provided fallback
         # URL, or return a 500 error to invoke the offical Twilio error message
@@ -52,7 +53,7 @@ async def retry_request(request):
 app = web.Application()
 
 # Initialize the Redis cache
-app.cache = redis.StrictRedis()
+app.cache = redis.from_url(os.environ.get('REDIS_URL', ''))
 
 # Add the route
 app.router.add_route('POST', '/retry', retry_request)
