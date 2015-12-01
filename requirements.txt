@@ -1,3 +1,8 @@
-Flask==0.10.1
+# Requirements for twiml-boomerang
+
+aiohttp==0.19.0
 redis==2.10.5
 twilio==4.9.2
+
+# Production server
+gunicorn==19.4.1
