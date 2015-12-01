@@ -7,6 +7,12 @@ import os
 import redis
 
 
+async def index(request):
+    """Redirects to the GitHub repo's page"""
+    return web.HTTPMovedPermanently(
+        'https://github.com/atbaker/twiml-boomerang')
+
+
 async def retry_request(request):
     """
     Attempts to recover the call if it was because of a timeout,
@@ -56,7 +62,8 @@ app = web.Application()
 app.cache = redis.from_url(os.environ.get('REDIS_URL', ''))
 
 # Add the route
-app.router.add_route('POST', '/retry', retry_request)
+app.router.add_route('GET', '/', index)
+app.router.add_route('*', '/retry', retry_request)
 
 if __name__ == '__main__':
     # Start the development server
