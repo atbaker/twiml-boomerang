@@ -1,1 +1,1 @@
-web: gunicorn app:app --bind localhost:8080 --worker-class aiohttp.worker.GunicornWebWorker --log-file=-
+web: gunicorn app:app --worker-class aiohttp.worker.GunicornWebWorker --log-file=-
