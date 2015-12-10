@@ -111,6 +111,13 @@ clone this repository and:
     pip install -r requirements.txt
     ```
 
+1. Start a redis server. If you installed [redis](http://redis.io/) via
+[homebrew](http://brew.sh/) you could use:
+
+    ```
+    redis-server /usr/local/etc/redis.conf
+    ```
+
 1. Start the app:
 
     ```
