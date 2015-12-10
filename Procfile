@@ -1,1 +1,1 @@
-web: gunicorn app:app --worker-class aiohttp.worker.GunicornWebWorker --log-file=-
+web: newrelic-admin run-program gunicorn app:app --worker-class aiohttp.worker.GunicornWebWorker --log-file=-
