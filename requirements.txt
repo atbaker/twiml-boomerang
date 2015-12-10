@@ -6,4 +6,3 @@ twilio==4.9.2
 
 # Production server
 gunicorn==19.4.1
-newrelic==2.58.2.45
